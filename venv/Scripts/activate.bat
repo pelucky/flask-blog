@@ -28,3 +28,6 @@ if defined _OLD_VIRTUAL_PATH goto ENDIFVPATH2
 :ENDIFVPATH2
 
 set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"
+
+set "FLASK_APP=manage.py"
+set "FLASK_DEBUG=1"
