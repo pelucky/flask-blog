@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Blog Admin Index{% endblock %}
+
+{% block page_common_content %}
+<div class="page-header">
+    {% if current_user.is_authenticated %}
+      <h1>Hello {{ current_user.username }}!</h1>
+      <p>Your last login date is: {{ current_user.last_login_date }}</p>
+    {% endif %}
+</div>
+{% endblock %}
