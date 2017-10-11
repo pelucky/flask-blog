@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - About Me{% endblock%}
+
+{% block page_common_content %}
+<div class="row">
+    <div class="col-sm-3 col-md-3">
+        <img src="{{ user.gravatar(size=256) }}"
+        alt="{{ user.nickname }}" class="img-rounded img-responsive" />
+    </div>
+    <div class="col-sm-4 col-md-4">
+        <blockquote>
+            <p>{{ user.nickname }}</p> <small><cite title="Source Title">{{ user.location }}<i class="glyphicon glyphicon-map-marker"></i></cite></small>
+        </blockquote>
+        <p> <i class="glyphicon glyphicon-envelope"></i> {{ user.email|replace("@", " (at) ")}}
+            <br/> <i class="glyphicon glyphicon-gift"></i> Blog is built since {{ user.register_date|string|truncate(10, killwords=True, end='') }}
+            <br/> <i class="glyphicon glyphicon-globe"></i> {{ user.about_me }}</p>
+    </div>
+</div>
+{% endblock %}

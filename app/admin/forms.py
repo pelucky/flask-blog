@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField, SubmitField,
-                     BooleanField)
-from wtforms.validators import DataRequired, EqualTo
+                     BooleanField, TextAreaField)
+from wtforms.validators import DataRequired, EqualTo, Email
 
 
 class LoginForm(FlaskForm):
@@ -21,4 +21,13 @@ class ChangePasswordForm(FlaskForm):
         'Repeat Password',
         validators=[DataRequired(),
                     EqualTo('password', message='Passwords must match')])
+    submit = SubmitField('Submit')
+
+
+class ChangeUserInformationForm(FlaskForm):
+    nickname = StringField('Nickname', validators=[DataRequired()])
+    location = StringField('Location', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(),
+                        Email("Invalid Email")])
+    about_me = TextAreaField('About_me', validators=[DataRequired()])
     submit = SubmitField('Submit')

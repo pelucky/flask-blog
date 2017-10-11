@@ -29,7 +29,7 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="{{ url_for('main.index') }}">Home <span class="sr-only">(current)</span></a></li>
         <li><a href="#">Archire</a></li>
-        <li><a href="#">About me</a></li>
+        <li><a href="{{ url_for('main.about_me')}}">About me</a></li>
         <form class="navbar-form navbar-left">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search">
@@ -39,12 +39,14 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">    
         {% if current_user.is_authenticated%}
+        <li><img src="{{ current_user.gravatar(size=50) }}" class='img-circle' ></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Control <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{{ url_for('admin.change_password') }}">Change Password</a></li>
+            <li><a href="{{ url_for('admin.change_user_info') }}"><span class="glyphicon glyphicon-user"> Change UserInfo</a></li>
+            <li><a href="{{ url_for('admin.change_password') }}"><span class="glyphicon glyphicon-cog"> Change Password</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="{{ url_for('admin.logout') }}">Log out</a></li>
+            <li><a href="{{ url_for('admin.logout') }}"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
           </ul>
         </li>
         {% endif %}

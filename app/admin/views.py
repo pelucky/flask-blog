@@ -1,8 +1,9 @@
 from flask import render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
-from forms import LoginForm, ChangePasswordForm
+from forms import LoginForm, ChangePasswordForm, ChangeUserInformationForm
 from ..models import User
+from app import db
 from datetime import datetime
 
 
@@ -49,3 +50,26 @@ def change_password():
             return redirect(url_for('admin.index'))
         flash("Old Password error!")
     return render_template('admin/change_password.html', form=form)
+
+
+@admin.route('/change_user_info', methods=['GET', 'POST'])
+@login_required
+def change_user_info():
+    form = ChangeUserInformationForm()
+    if form.validate_on_submit():
+        current_user.nickname = form.nickname.data
+        current_user.location = form.location.data
+        current_user.about_me = form.about_me.data
+        print "form.nickname.data: " + form.nickname.data
+        if current_user.email != form.email.data:
+            current_user.change_email(form.email.data)
+            current_user.email = form.email.data
+        db.session.add(current_user)
+        db.session.commit()
+        flash("Change user infomation successfully!")
+        return redirect(url_for('main.about_me'))
+    form.nickname.data = current_user.nickname
+    form.location.data = current_user.location
+    form.about_me.data = current_user.about_me
+    form.email.data = current_user.email
+    return render_template('admin/change_user_info.html', form=form)
