@@ -60,7 +60,17 @@ header {
     margin-top: 1.1em;
     margin-bottom: 1.1em;
     font-size: 15px;
-    line-height: 1.45
+    font-family: "Hiragino Sans GB”,"华文细黑","STHeiti","微软雅黑", "Microsoft YaHei",SimHei,"Helvetica Neue”,Helvetica,Arial, sans-serif;
+    line-height: 1.3
+}
+
+.post-text li {
+    font-size: 15px;
+    margin-top: 1.1em;
+    margin-bottom: 1.1em;
+    font-size: 15px;
+    font-family: "Hiragino Sans GB”,"华文细黑","STHeiti","微软雅黑", "Microsoft YaHei",SimHei,"Helvetica Neue”,Helvetica,Arial, sans-serif;
+    line-height: 1.3
 }
 
 .alert {
@@ -96,4 +106,13 @@ h1 {
 
 .h5, h5 {
     font-size: 14px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.gravatar.img-circle {
+    margin-top: 8px;
 }
