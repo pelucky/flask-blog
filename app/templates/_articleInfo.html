@@ -1,0 +1,10 @@
+<div class="below-entry-meta">
+    <span class="post-datetime"><span class="glyphicon glyphicon-calendar"></span>{{ article.create_timestramp|string|truncate(19, killwords=True, end='')}}</span>
+    <span class="post-user"><span class="glyphicon glyphicon-user"></span>{{ article.author.nickname}}</span>
+    <span class="post-category"><span class="glyphicon glyphicon-flag"></span>
+            <a href="{{ url_for('main.category', name=article.category.name) }}">{{ article.category.name }}</a>
+    </span>
+    <span class="post-tags"><span class="glyphicon glyphicon-tags"></span>
+            {{ article.tags }}
+    </span>
+</div>

@@ -8,6 +8,7 @@
     type="image/x-icon"> 
 <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}" 
     type="image/x-icon">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/common.css') }}"/>
 {% endblock %}
 
 {% block navbar %}
@@ -28,8 +29,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="active"><a href="{{ url_for('main.index') }}">Home <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Archire</a></li>
-        <li><a href="{{ url_for('main.about_me')}}">About me</a></li>
+        <li><a href="{{ url_for('main.archive')}}">Archive</a></li>
         <form class="navbar-form navbar-left">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search">
@@ -43,6 +43,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
+             <li><a href="{{ url_for('admin.index') }}"><span class="glyphicon glyphicon-dashboard"> Dashboard</a></li>
             <li><a href="{{ url_for('admin.change_user_info') }}"><span class="glyphicon glyphicon-user"> Change UserInfo</a></li>
             <li><a href="{{ url_for('admin.change_password') }}"><span class="glyphicon glyphicon-cog"> Change Password</a></li>
             <li role="separator" class="divider"></li>
@@ -71,4 +72,55 @@
   {% endwith %}
   {% block page_common_content %}{% endblock %}
 </div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="row footer-top">
+            <div class="col-sm-6 col-lg-6">
+                <h4>Pelucky's Blog</h4>
+                <p>Except where otherwise noted, content on this site is licensed under a 
+                  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+                  Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+            </div>
+            <div class="col-sm-6  col-lg-5 col-lg-offset-1">
+                <div class="row about">
+                    <div class="col-xs-3">
+                        <h4>About</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="{{ url_for('main.about_me') }}">Author</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="//github.com/pelucky">Github</a></li>
+                            <li><a href="mailto:zx8522588@gmail.com">Email</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>RSS</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" target="_blank">XML feed</a></li>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>Support</h4>
+                        <ul class="list-unstyled">
+                           <li><a href="//flask.pocoo.org/docs/0.12/" target="_blank">Flask</a></li>
+                            <li><a href="//getbootstrap.com/" target="_blank">Bootstrap</a></li>
+                            <li><a href="https://pandao.github.io/editor.md/" target="_blank">Editor.md</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row footer-bottom">
+            <ul class="list-inline text-center">
+                <li>Handmade by pelucky, Thanks to <a href="https://www.cdxy.me/">cdxy</a>.</li>
+            </ul>
+        </div>
+    </div>
+</footer>
 {%- endblock content %}

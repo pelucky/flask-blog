@@ -1,0 +1,16 @@
+<div class="row">
+    <h5>Recent Posts</h5>
+    <ul>
+        {% for article in articles[0:5] %}       
+                <li><a href="{{ url_for('main.article', id=article.id) }}">{{ article.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <h5>Categories</h5>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{{ url_for('main.category', name=category.name) }}">{{ category.name }}</a>({{ category.articles.count() }})</li>
+        {% endfor %}
+    </ul>
+</div>

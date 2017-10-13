@@ -4,6 +4,7 @@ from flask import request
 from . import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime
+from markdown import markdown
 
 
 class User(db.Model, UserMixin):
@@ -18,6 +19,7 @@ class User(db.Model, UserMixin):
     last_login_date = db.Column(db.DateTime, default=datetime.utcnow())
     location = db.Column(db.String(128))
     about_me = db.Column(db.Text())
+    articles = db.relationship('Article', backref='author', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -69,3 +71,51 @@ class User(db.Model, UserMixin):
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Article(db.Model):
+    __tablename__ = 'articles'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), unique=True, nullable=False)
+    content = db.Column(db.Text())
+    markdown_html = db.Column(db.Text())
+    create_timestramp = db.Column(db.DateTime, index=True,
+                                  default=datetime.utcnow())
+    last_edit_timestramp = db.Column(db.DateTime, default=datetime.utcnow())
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                          nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),
+                            nullable=False)
+    tags = db.Column(db.String(64))
+
+    @staticmethod
+    def on_changed_content(target, value, oldvalue, initiator):
+        target.markdown_html = markdown(
+            value,
+            ouput_format='html',
+            extensions=['markdown.extensions.extra',
+                        'markdown.extensions.admonition',
+                        'markdown.extensions.codehilite',
+                        'markdown.extensions.headerid',
+                        'markdown.extensions.meta',
+                        'markdown.extensions.nl2br',
+                        'markdown.extensions.sane_lists',
+                        'markdown.extensions.smarty',
+                        'markdown.extensions.toc',
+                        'markdown.extensions.wikilinks'])
+
+    def __repr__(self):
+        return '<Article %r>' % self.title
+
+
+db.event.listen(Article.content, 'set', Article.on_changed_content)
+
+
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    articles = db.relationship('Article', backref='category', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Category %r>' % self.name

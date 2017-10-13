@@ -9,4 +9,28 @@
       <p>Your last login date is: {{ current_user.last_login_date|string|truncate(19, killwords=True, end='') }}</p>
     {% endif %}
 </div>
+<div class="col-md-12">
+    <div class="article-operate">
+        <a href="{{ url_for('admin.add_category') }}"><span class="label label-success">[Add Category]</span> </a> 
+        <a href="{{ url_for('admin.write_article') }}"><span class="label label-info">[Add Article]</span></a> 
+    </div>
+</div>
+<h1>Articles List</h1>
+<div class="col-md-12">
+    <div class="article-list">
+        <dl class="dl-horizontal">
+            {% for article in articles %}
+                <dt>[{{ article.create_timestramp|string|truncate(10, killwords=True, end='') }}]</dt>
+                <dd>
+                    <a href="{{ url_for('admin.delete_article', id=article.id) }}"> 
+                        <span class="label label-danger">Delete</span> 
+                    </a>
+                    <a href="{{ url_for('admin.edit_article', id=article.id) }}"> 
+                        <span class="label label-warning">Edit</span> 
+                    </a>
+                    <a href="{{ url_for('main.article', id=article.id) }}"> {{ article.title }} </a></dd>
+            {% endfor %}
+        </dl>
+    </div>
+</div>
 {% endblock %}
