@@ -6,7 +6,8 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or \
         os.urandom(24)
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    FLASK_POST_PER_PAGE = 5
+    FLASK_POST_PER_PAGE = 6
+    RECENT_POST = 10
 
     @staticmethod
     def init_app(app):

@@ -1,4 +1,5 @@
-from flask import render_template, request, current_app
+from flask import (render_template, request,
+                   current_app, flash, redirect, url_for)
 from ..models import User
 from . import main
 from ..models import Article, Category
@@ -48,3 +49,26 @@ def category(name):
     category = Category.query.filter_by(name=name).first_or_404()
     return render_template('category.html', category=category,
                            articles=articles, categories=categories)
+
+
+@main.route('/search')
+def search():
+    keywords = request.args.get('query', type=unicode)
+    if keywords:
+        articles = Article.query.order_by(Article.create_timestramp.desc())
+        categories = Category.query
+        page = request.args.get('page', 1, type=int)
+        pagination = Article.query.order_by(
+            Article.create_timestramp.desc()).filter(
+            Article.title.like('%' + keywords + '%')).paginate(
+            page,
+            per_page=current_app.config['FLASK_POST_PER_PAGE'],
+            error_out=False)
+        query_articles = pagination.items
+        return render_template('search.html', articles=articles,
+                               categories=categories,
+                               query_articles=query_articles,
+                               keywords=keywords,
+                               pagination=pagination)
+    flash("You should search something!", "warning")
+    return redirect(url_for('main.index'))

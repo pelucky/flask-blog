@@ -8,28 +8,7 @@
     <div class="row">
         <div class="col-lg-9">
             {% for article in one_page_articles %}
-            <div class="article-content">
-                <div class="row">
-                    <div class="col-lg-12"> 
-                        <h1><a class="entry-title" href="{{ url_for('main.article', id=article.id) }}">
-                            {{ article.title }}
-                        </a></h1>
-                    </div>
-                    <div class="col-lg-12">
-                        {% include '_articleInfo.html' %}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        {% if article.markdown_html %}
-                            {{ article.markdown_html|safe|striptags|truncate(200) }}
-                        {% else %}
-                            {{ article.content|markdown|safe|striptags|truncate(200) }}
-                        {% endif %}
-                        <a href="{{ url_for('main.article', id=article.id) }}"> Read More</a>
-                    </div>
-                </div>
-            </div>
+                {% include "_articleblock.html" %}
             {% endfor %}
         </div>
 

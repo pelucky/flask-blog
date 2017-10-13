@@ -15,8 +15,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(128), unique=True, nullable=False)
     gravatar_url = db.Column(db.String(128))
     password_hash = db.Column(db.String(128), nullable=False)
-    register_date = db.Column(db.DateTime, default=datetime.utcnow())
-    last_login_date = db.Column(db.DateTime, default=datetime.utcnow())
+    register_date = db.Column(db.DateTime, default=datetime.now())
+    last_login_date = db.Column(db.DateTime, default=datetime.now())
     location = db.Column(db.String(128))
     about_me = db.Column(db.Text())
     articles = db.relationship('Article', backref='author', lazy='dynamic')
@@ -58,9 +58,9 @@ class User(db.Model, UserMixin):
         users = User.query
         for user in users:
             if user.register_date is None:
-                user.register_date = datetime.utcnow()
+                user.register_date = datetime.now()
             if user.last_login_date is None:
-                user.last_login_date = datetime.utcnow()
+                user.last_login_date = datetime.now()
             db.session.add(user)
         db.session.commit()
 
@@ -80,8 +80,8 @@ class Article(db.Model):
     content = db.Column(db.Text())
     markdown_html = db.Column(db.Text())
     create_timestramp = db.Column(db.DateTime, index=True,
-                                  default=datetime.utcnow())
-    last_edit_timestramp = db.Column(db.DateTime, default=datetime.utcnow())
+                                  default=datetime.now())
+    last_edit_timestramp = db.Column(db.DateTime, default=datetime.now())
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'),
                           nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),

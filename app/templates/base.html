@@ -30,9 +30,9 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="{{ url_for('main.index') }}">Home <span class="sr-only">(current)</span></a></li>
         <li><a href="{{ url_for('main.archive')}}">Archive</a></li>
-        <form class="navbar-form navbar-left">
+        <form class="navbar-form navbar-left" action='/search'>
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" placeholder="Search" name="query">
           </div>
           <button type="submit" class="btn btn-default">Submit</button>
         </form>
@@ -59,13 +59,19 @@
 
 {%- block content %}
 <div class="container">
-  {% with messages = get_flashed_messages() %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-warning">
-        <button type='button' class='close' data-dismiss='alert'>&times;</button>
-        {{ message }}
-      </div>
+      {% for category, message in messages %}
+        {% if category == 'success' %}
+          <div class="alert alert-success">
+        {% elif category == 'error' %}
+          <div class="alert alert-danger">
+        {% else %}
+        <div class="alert alert-warning">
+        {% endif %}
+            <button type='button' class='close' data-dismiss='alert'>&times;</button>
+            {{ message }}
+          </div>
       {% endfor %}
       </ul>
     {% endif %}
