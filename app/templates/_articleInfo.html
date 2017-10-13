@@ -1,4 +1,9 @@
 <div class="below-entry-meta">
+    {% if current_user.is_authenticated %}
+    <a href = "{{ url_for('admin.edit_article', id=article.id ) }}">
+        <span class="label label-primary">Edit</span>
+    </a>
+    {% endif %}
     <span class="post-datetime"><span class="glyphicon glyphicon-calendar"></span>{{ article.create_timestramp|string|truncate(19, killwords=True, end='')}}</span>
     <span class="post-user"><span class="glyphicon glyphicon-user"></span>{{ article.author.nickname}}</span>
     <span class="post-category"><span class="glyphicon glyphicon-flag"></span>

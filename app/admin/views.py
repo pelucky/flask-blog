@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
-                   WriteArticleForm, AddCategoryForm)
+                   WriteArticleForm, AddCategoryForm, EditCategoryForm)
 from ..models import User, Article, Category
 from app import db
 from datetime import datetime
@@ -143,3 +143,17 @@ def add_category():
         flash("Add category successfully!")
         return redirect(url_for('admin.index'))
     return render_template('admin/add_category.html', form=form)
+
+
+@admin.route('/edit_category', methods=['GET', 'POST'])
+@login_required
+def edit_category():
+    form = EditCategoryForm()
+    if form.validate_on_submit():
+        category = Category.query.get_or_404(form.category_id.data)
+        category.name = form.new_name.data
+        db.session.add(category)
+        db.session.commit()
+        flash('Edit category successfully!')
+        return redirect(url_for('admin.index'))
+    return render_template('admin/edit_category.html', form=form)

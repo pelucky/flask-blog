@@ -49,3 +49,14 @@ class WriteArticleForm(FlaskForm):
 class AddCategoryForm(FlaskForm):
     name = StringField('Category name', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+
+class EditCategoryForm(FlaskForm):
+    category_id = SelectField('Categories', coerce=int)
+    new_name = StringField('Category new name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def __init__(self):
+        super(EditCategoryForm, self).__init__()
+        self.category_id.choices = [(c.id, c.name)
+                                    for c in Category.query.order_by('id')]
