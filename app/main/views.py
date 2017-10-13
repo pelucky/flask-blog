@@ -3,6 +3,8 @@ from flask import (render_template, request,
 from ..models import User
 from . import main
 from ..models import Article, Category
+from urlparse import urljoin
+from werkzeug.contrib.atom import AtomFeed
 
 
 @main.route('/')
@@ -72,3 +74,22 @@ def search():
                                pagination=pagination)
     flash("You should search something!", "warning")
     return redirect(url_for('main.index'))
+
+
+def make_external(url):
+    return urljoin(request.url_root, url)
+
+
+@main.route('/rss')
+def rss():
+    feed = AtomFeed('Recent Articles',
+                    feed_url=request.url, url=request.url_root)
+    articles = Article.query.order_by(Article.create_timestramp.desc()) \
+                      .limit(15).all()
+    for article in articles:
+        feed.add(article.title, unicode(article.markdown_html),
+                 content_type='html',
+                 author=User.query.get(article.author_id).nickname,
+                 url=make_external(url_for('main.article', id=article.id)),
+                 updated=article.last_edit_timestramp)
+    return feed.get_response()

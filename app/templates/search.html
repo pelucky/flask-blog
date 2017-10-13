@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros%}
+
+{% block title %}Search{% endblock %}
+
+{% block page_common_content %}
+<div class="main-content-section">
+    <div class="row">
+        <div class="col-lg-9">
+            <h1>Search <strong>{{ keywords }}</strong> results:</h1>
+            {% if query_articles %}
+                {% for article in query_articles %}
+                    {% include "_articleblock.html" %}
+                {% endfor %}
+            {% else %}
+                <p>Nothing found! Maybe you can use Google to search my blog</p>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-3">
+            {% include "_sidebar.html" %}
+        </div>
+    </div>
+</div>
+
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, 'main.search', keywords=keywords) }}
+</div>
+{% endblock %}
