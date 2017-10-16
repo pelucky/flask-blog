@@ -2,36 +2,97 @@
 
 {% block title %}Blog Admin Index{% endblock %}
 
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='bootstraptable/dist/bootstrap-table.min.css') }}"/>
+{% endblock %}
+
 {% block page_common_content %}
-<div class="page-header">
-    {% if current_user.is_authenticated %}
-      <h1>Hello {{ current_user.username }}!</h1>
-      <p>Your last login date is: {{ current_user.last_login_date|string|truncate(19, killwords=True, end='') }}</p>
-    {% endif %}
-</div>
-<div class="col-md-12">
-    <div class="article-operate">
-        <a href="{{ url_for('admin.add_category') }}"><span class="label label-success">[Add Category]</span> </a> 
-        <a href="{{ url_for('admin.edit_category') }}"><span class="label label-success">[Edit Category]</span> </a> 
-        <a href="{{ url_for('admin.write_article') }}"><span class="label label-info">[Add Article]</span></a> 
+<div class="main-content-section">
+    <div class="row">  
+        {% include 'admin/_sidebar.html' %}
+        <div class="col-lg-10">
+            <div class="page-header page-title-top">
+                <h1>Manage Articles</h1>
+            </div>
+            <div class="col-md-12">
+                <table data-toggle="table" data-striped="true" data-pagination="true" data-page-size="10" data-search="true"
+                data-show-columns="true" >
+                    <thead>
+                        <tr>
+                            <th data-sortable="true">Article Title</th>
+                            <th data-sortable="true">Category</th>
+                            <th data-sortable="true">Tags</th>
+                            <th data-sortable="true">Create</th>
+                            <th data-sortable="true">Edit</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for article in articles %}
+                        <tr>
+                            <td><a href="{{ url_for('main.article', id=article.id) }}">{{ article.title }}</a></td>
+                            <td>
+                                <a href="{{ url_for('main.category', name=article.category.name) }}">
+                                    {{ article.category.name }}
+                                </a>
+                            </td>
+                            <td>{{ article.tags }}</td>
+                            <td>{{ article.create_timestramp|string|truncate(10, killwords=True, end='') }}</td>
+                            <td>{{ article.last_edit_timestramp|string|truncate(10, killwords=True, end='') }}</td>
+                            <td><a href="{{ url_for('admin.edit_article', id=article.id) }}"> 
+                                    <span class="glyphicon glyphicon-edit"></span> 
+                                </a>
+                            </td>
+                            <td>
+                                <form id="delForm{{ article.id }}" method="get" action="{{ url_for('admin.delete_article', id=article.id) }}">
+                                    <a onclick="deletArticleConfirm({{ article.id }})"> 
+                                        <span class="glyphicon glyphicon-trash"></span> 
+                                    </a>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-<h1>Articles List</h1>
-<div class="col-md-12">
-    <div class="article-list">
-        <dl class="dl-horizontal">
-            {% for article in articles %}
-                <dt>[{{ article.create_timestramp|string|truncate(10, killwords=True, end='') }}]</dt>
-                <dd>
-                    <a href="{{ url_for('admin.delete_article', id=article.id) }}"> 
-                        <span class="label label-danger">Delete</span> 
-                    </a>
-                    <a href="{{ url_for('admin.edit_article', id=article.id) }}"> 
-                        <span class="label label-warning">Edit</span> 
-                    </a>
-                    <a href="{{ url_for('main.article', id=article.id) }}"> {{ article.title }} </a></dd>
-            {% endfor %}
-        </dl>
+
+<div class="modal fade" id="delCfmModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <p><strong>Delete</strong> article can't be recovery, go on?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a onclick="" id="cfmClick" class="btn btn-danger" data-dismiss="modal">Delete</a>
+            </div>
+        </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="{{ url_for('static',filename='bootstraptable/dist/bootstrap-table.min.js') }}"></script>
+<script src="{{ url_for('static',filename='bootstraptable/dist/locale/bootstrap-table-zh-CN.min.js') }}"></script>
+<script src="{{ url_for('static',filename='bootstraptable/dist/locale/bootstrap-table-en-US.min.js') }}"></script>
+<script>
+function deletArticleConfirm(articleId) {
+    $('#cfmClick').click(function () {
+        $('#delForm' + articleId).submit();
+    });
+    $('#delCfmModel').modal();
+}
+</script>
 {% endblock %}

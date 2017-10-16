@@ -116,3 +116,23 @@ img {
 .gravatar.img-circle {
     margin-top: 8px;
 }
+
+.page-header.page-title-top {
+    margin-top:0;
+}
+
+.col-md-6.categroy {
+    padding-left: 0;
+    padding-right: 15px;
+}
+
+.col-md-6.tag {
+    padding-left: 15px;
+    padding-right: 0;
+    color: #000;
+}
+
+.pagination.center {
+    text-align: center;
+    width: 100%;
+}

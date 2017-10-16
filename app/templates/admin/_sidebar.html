@@ -1,0 +1,13 @@
+<div class="col-lg-2">    
+    <ul class="nav nav-list">
+      <li class="nav-header">Articles</li>
+      <li><a href="{{ url_for('admin.index') }}">Manage Articles</a></li>
+      <li><a href="{{ url_for('admin.write_article') }}">Add Article</a></li>
+      <li class="nav-header">Categories</li>
+      <li><a href="{{ url_for('admin.add_category') }}">Add Category</a></li>
+      <li><a href="{{ url_for('admin.edit_category') }}">Edit Category</a></li>
+      <li class="nav-header">Settings</li>
+      <li><a href="{{ url_for('admin.change_user_info') }}">Change User Info</a></li>
+      <li><a href="{{ url_for('admin.change_password') }}">Change Pasword</a></li>
+    </ul>
+</div>

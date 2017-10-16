@@ -8,64 +8,72 @@
 {% endblock %}
 
 {% block page_common_content %}
-<div class="page-header">
-  <h1>Write Articles</h1>
-</div>
 
-<div class="col-md-12">
-    
-        <form method="POST" action=
-        {% if "write" in request.url  %}
-            "{{ url_for('admin.write_article') }}"
-        {% else %}
-            "{{ url_for('admin.edit_article', id=request.path.split('/')[-1]) }}"
-        {% endif %}
-        >
+<div class="main-content-section">
+    <div class="row">
+        {% include 'admin/_sidebar.html' %}
+        <div class="col-lg-10">
+            <div class="page-header page-title-top">
+                <h1>Write Articles</h1>
+            </div>
+            <div class="col-md-12">
+                <form method="POST" action=
+                {% if "write" in request.url  %}
+                    "{{ url_for('admin.write_article') }}"
+                {% else %}
+                    "{{ url_for('admin.edit_article', id=request.path.split('/')[-1]) }}"
+                {% endif %}
+                >
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.title.label }}
+                        {% if form.title.errors %}
+                            {% for e in form.title.errors %}
+                                <p class="help-block">{{ e }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        {{ form.title(class_='form-control') }}
+                    </div>
 
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.title.label }}
-            {% if form.title.errors %}
-                {% for e in form.title.errors %}
-                    <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-            {{ form.title(class_='form-control') }}
-        </div>
+                    <div class="col-md-6 categroy">
+                        <div class="form-group">
+                            {{ form.category_id.label }}
+                            {% if form.category_id.errors %}
+                                {% for e in form.category_id.errors %}
+                                    <p class="help-block">{{ e }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {{ form.category_id(class_='form-control') }}
+                        </div>
+                    </div>
+                    <div class="col-md-6 tag">
+                        <div class="form-group">
+                            {{ form.tags.label }}
+                            {% if form.tags.errors %}
+                                {% for e in form.tags.errors %}
+                                    <p class="help-block">{{ e }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            {{ form.tags(class_='form-control') }}
+                        </div>
+                    </div>
 
-        <div class="form-group">
-            {{ form.category_id.label }}
-            {% if form.category_id.errors %}
-                {% for e in form.category_id.errors %}
-                    <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-            {{ form.category_id(class_='form-control') }}
-        </div>
-
-        <div class="form-group">
-            {{ form.tags.label }}
-            {% if form.tags.errors %}
-                {% for e in form.tags.errors %}
-                    <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-            {{ form.tags(class_='form-control') }}
-        </div>
-
-        <div class="form-group">
-            {{ form.content.label }}
-            {% if form.content.errors %}
-                {% for e in form.content.errors %}
-                    <p class="help-block">{{ e }}</p>
-                {% endfor %}
-            {% endif %}
-            <div id="test-editormd" class="form-control">
-                {{ form.content(style="display:none;") }}
+                    <div class="form-group">
+                        {{ form.content.label }}
+                        {% if form.content.errors %}
+                            {% for e in form.content.errors %}
+                                <p class="help-block">{{ e }}</p>
+                            {% endfor %}
+                        {% endif %}
+                        <div id="test-editormd" class="form-control">
+                            {{ form.content(style="display:none;") }}
+                        </div>
+                    </div>
+                    <input class="btn btn-primary" type="submit" value="Submit">
+                </form>
             </div>
         </div>
-        <input class="btn btn-primary" type="submit" value="Submit">
-    </form>
+    </div>
 </div>
 {% endblock %}
 

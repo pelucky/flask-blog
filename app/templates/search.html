@@ -15,15 +15,15 @@
             {% else %}
                 <p>Nothing found! Maybe you can use Google to search my blog</p>
             {% endif %}
+
+            <div class="pagination center">
+                {{ macros.pagination_widget(pagination, 'main.search', keywords=keywords) }}
+            </div>
         </div>
 
         <div class="col-lg-3">
             {% include "_sidebar.html" %}
         </div>
     </div>
-</div>
-
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, 'main.search', keywords=keywords) }}
 </div>
 {% endblock %}

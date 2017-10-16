@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import "_macros.html" as macros%}
 
-{% block title %}Index{% endblock %}
+{% block title %}Pelucky's Blog{% endblock %}
 
 {% block page_common_content %}
 <div class="main-content-section">
@@ -9,16 +9,15 @@
         <div class="col-lg-9">
             {% for article in one_page_articles %}
                 {% include "_articleblock.html" %}
-            {% endfor %}
+            {% endfor %}            
+            <div class="pagination center">
+                {{ macros.pagination_widget(pagination, 'main.index') }}
+            </div>
         </div>
-
         <div class="col-lg-3">
             {% include "_sidebar.html" %}
         </div>
     </div>
 </div>
 
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, 'main.index') }}
-</div>
 {% endblock %}

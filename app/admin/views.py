@@ -1,4 +1,5 @@
-from flask import render_template, url_for, redirect, flash
+from flask import (render_template, url_for,
+                   redirect, flash)
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
@@ -18,7 +19,9 @@ def login():
                                              form.password.data):
                 login_user(user, remember=form.remember_me.data)
                 user.last_login_date = datetime.now()
-                flash(u"Log in successfully!", 'success')
+                flash(u"Log in successfully! Your last login date is: %s"
+                      % str(current_user.last_login_date).split('.')[0],
+                      'success')
                 return redirect(url_for('admin.index'))
             flash(u"Username or Password error!", 'error')
         return render_template('admin/login.html', form=form)
