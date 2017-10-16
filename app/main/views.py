@@ -36,6 +36,7 @@ def about_me():
 @main.route('/aritcle/<int:id>')
 def article(id):
     article = Article.query.get_or_404(id)
+    Article.add_one_view(article)
     return render_template('article.html', article=article)
 
 

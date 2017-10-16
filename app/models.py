@@ -90,6 +90,7 @@ class Article(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),
                             nullable=False)
     tags = db.Column(db.String(64))
+    number_of_views = db.Column(db.Integer, default=0)
 
     @staticmethod
     def on_changed_content(target, value, oldvalue, initiator):
@@ -106,6 +107,12 @@ class Article(db.Model):
                         'markdown.extensions.smarty',
                         'markdown.extensions.toc',
                         'markdown.extensions.wikilinks'])
+
+    @staticmethod
+    def add_one_view(article):
+        article.number_of_views += 1
+        db.session.add(article)
+        db.session.commit()
 
     def __repr__(self):
         return '<Article %r>' % self.title
