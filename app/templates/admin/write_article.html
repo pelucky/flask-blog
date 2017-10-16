@@ -28,8 +28,11 @@
                     <div class="form-group">
                         {{ form.title.label }}
                         {% if form.title.errors %}
-                            {% for e in form.title.errors %}
-                                <p class="help-block">{{ e }}</p>
+                            {% for e in form.tags.errors %}
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <strong>title</strong>:{{ e }}
+                                </div>
                             {% endfor %}
                         {% endif %}
                         {{ form.title(class_='form-control') }}
@@ -40,7 +43,10 @@
                             {{ form.category_id.label }}
                             {% if form.category_id.errors %}
                                 {% for e in form.category_id.errors %}
-                                    <p class="help-block">{{ e }}</p>
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                      <strong>categoies</strong>: {{ e }}
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                             {{ form.category_id(class_='form-control') }}
@@ -51,7 +57,10 @@
                             {{ form.tags.label }}
                             {% if form.tags.errors %}
                                 {% for e in form.tags.errors %}
-                                    <p class="help-block">{{ e }}</p>
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                      <strong>tags</strong>:{{ e }}
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                             {{ form.tags(class_='form-control') }}
@@ -62,7 +71,10 @@
                         {{ form.content.label }}
                         {% if form.content.errors %}
                             {% for e in form.content.errors %}
-                                <p class="help-block">{{ e }}</p>
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <strong>content</strong>:{{ e }}
+                                </div>
                             {% endfor %}
                         {% endif %}
                         <div id="test-editormd" class="form-control">

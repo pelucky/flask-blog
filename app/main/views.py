@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+
 from flask import (render_template, request,
                    current_app, flash, redirect, url_for)
 from ..models import User

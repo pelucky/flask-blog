@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+
 from flask import (render_template, url_for,
                    redirect, flash)
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
-                   WriteArticleForm, AddCategoryForm, EditCategoryForm)
+                   WriteArticleForm, AddCategoryForm, EditCategoryForm,
+                   DeleteCategoryForm)
 from ..models import User, Article, Category
 from app import db
 from datetime import datetime
@@ -160,3 +164,24 @@ def edit_category():
         flash(u'Edit category successfully!', 'success')
         return redirect(url_for('admin.index'))
     return render_template('admin/edit_category.html', form=form)
+
+
+@admin.route('/delete_category/', methods=["GET", "POST"])
+@login_required
+def delete_category():
+    form = DeleteCategoryForm()
+    if form.validate_on_submit():
+        category = Category.query.get_or_404(form.category_id.data)
+        if category:
+            articles = Article.query.filter_by(category_id=category.id)
+            for article in articles:
+                db.session.delete(article)
+            db.session.delete(category)
+            db.session.commit()
+            flash(u"Delete category %s successfull!"
+                  % category.name, 'success')
+        else:
+            flash(u"Can't find acategoryrticle with id %s"
+                  % str(category.id), 'error')
+        return redirect(url_for('admin.index'))
+    return render_template('admin/delete_category.html', form=form)

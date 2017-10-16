@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding=utf-8 -*-
+
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField, SubmitField,
                      BooleanField, TextAreaField, SelectField)
@@ -58,5 +61,15 @@ class EditCategoryForm(FlaskForm):
 
     def __init__(self):
         super(EditCategoryForm, self).__init__()
+        self.category_id.choices = [(c.id, c.name)
+                                    for c in Category.query.order_by('id')]
+
+
+class DeleteCategoryForm(FlaskForm):
+    category_id = SelectField('Categories', coerce=int)
+    submit = SubmitField('Submit')
+
+    def __init__(self):
+        super(DeleteCategoryForm, self).__init__()
         self.category_id.choices = [(c.id, c.name)
                                     for c in Category.query.order_by('id')]

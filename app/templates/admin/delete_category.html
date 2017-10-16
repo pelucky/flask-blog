@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block title %}Blog - Add Category{% endblock%}
+{% block title %}Blog - Delete Category{% endblock%}
 
 {% block page_common_content %}
 <div class="main-content-section">
@@ -9,10 +9,15 @@
         {% include 'admin/_sidebar.html' %}
         <div class="col-lg-10">
             <div class="page-header page-title-top">
-                <h1>Add Category</h1>
+                <h1>Delete Category</h1>
             </div>
             <div class="col-md-4">
                 {{ wtf.quick_form(form) }}
+            </div>
+
+            <div class="alert alert-danger alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <strong>Danger! </strong>All articles in this category will be delete!
             </div>
         </div>
     </div>
