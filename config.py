@@ -64,5 +64,5 @@ config = {
     "DEVELOPMENT": DevelopmentConfig,
     "PRODUCTION": ProductionConfig,
     "TEST": TestConfig,
-    'UNIX': UnixConfig
+    "UNIX": UnixConfig
 }
