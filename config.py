@@ -5,7 +5,17 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+if os.path.exists('.env'):
+    print('Importing environment from .evn...')
+    for line in open('.env'):
+        var = line.strip().split('=')
+        if len(var) == 2:
+            os.environ[var[0]] = str(var[1])
+
+
 class Config(object):
+    # For multi process, it should be the same SECRECT_KEY
+    # Or it will be a CSRF problem
     SECRET_KEY = os.environ.get('SECRET_KEY') or \
         os.urandom(24)
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
@@ -47,7 +57,8 @@ class UnixConfig(ProductionConfig):
 
         import logging
         from logging.handlers import RotatingFileHandler
-        rotatingFilelog_handler = RotatingFileHandler(filename='blog.log')
+        rotatingFilelog_handler = RotatingFileHandler(filename=os.path.join(
+            './logs/', 'blog.log'))
         rotatingFilelog_handler.setLevel(logging.WARNING)
         app.logger.addHandler(rotatingFilelog_handler)
 

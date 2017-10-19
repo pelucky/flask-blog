@@ -12,13 +12,13 @@ if os.path.exists('.env'):
     for line in open('.env'):
         var = line.strip().split('=')
         if len(var) == 2:
-            os.environ[var[0]] = var[1]
+            os.environ[var[0]] = str(var[1])
 
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'DEFAULT')
-migrate = Migrate(app, db)
-Markdown(app)
+application = create_app(os.getenv('FLASK_CONFIG') or 'DEFAULT')
+migrate = Migrate(application, db)
+Markdown(application)
 
 
 if __name__ == "__main__":
-    app.run(debug=app.debug)
+    application.run(debug=application.debug)

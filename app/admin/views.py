@@ -2,7 +2,7 @@
 # -*- coding=utf-8 -*-
 
 from flask import (render_template, url_for,
-                   redirect, flash)
+                   redirect, flash, current_app)
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
@@ -28,6 +28,9 @@ def login():
                       'success')
                 return redirect(url_for('admin.index'))
             flash(u"Username or Password error!", 'error')
+            current_app.logger.warning(u'Invalid Login: %s, %s'
+                                       % (form.username.data,
+                                          form.password.data))
         return render_template('admin/login.html', form=form)
     return redirect(url_for('admin.index'))
 
