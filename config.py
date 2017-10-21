@@ -18,6 +18,7 @@ class Config(object):
     # Or it will be a CSRF problem
     SECRET_KEY = os.environ.get('SECRET_KEY') or \
         os.urandom(24)
+    print "SECRET_KEY: " + SECRET_KEY
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True

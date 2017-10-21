@@ -7,14 +7,7 @@ from flaskext.markdown import Markdown
 import os
 
 
-if os.path.exists('.env'):
-    print('Importing environment from .evn...')
-    for line in open('.env'):
-        var = line.strip().split('=')
-        if len(var) == 2:
-            os.environ[var[0]] = str(var[1])
-
-
+print "Run in manage"
 application = create_app(os.getenv('FLASK_CONFIG') or 'DEFAULT')
 migrate = Migrate(application, db)
 Markdown(application)
