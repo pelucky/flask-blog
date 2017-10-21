@@ -10,13 +10,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
-            {% if article.markdown_html %}
-                {{ article.markdown_html|safe|striptags|truncate(200) }}
-            {% else %}
-                {{ article.content|markdown|safe|striptags|truncate(200) }}
-            {% endif %}
-            <a href="{{ url_for('main.article', id=article.id) }}"> Read More</a>
+        <div class="col-lg-12 review">
+            <p>
+                {% if article.markdown_html %}
+                    {{ article.markdown_html|safe|striptags|truncate(200) }}
+                {% else %}
+                    {{ article.content|markdown|safe|striptags|truncate(200) }}
+                {% endif %}
+                <!-- <a href="{{ url_for('main.article', id=article.id) }}"> Read More</a> -->
+            </p>
         </div>
     </div>
 </div>

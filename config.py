@@ -42,6 +42,10 @@ class DevelopmentConfig(Config):
         from logging.handlers import RotatingFileHandler
         rotatingFilelog_handler = RotatingFileHandler(filename='blog_dev.log')
         rotatingFilelog_handler.setLevel(logging.DEBUG)
+        rotatingFilelog_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'
+        ))
         app.logger.addHandler(rotatingFilelog_handler)
 
 
@@ -60,6 +64,10 @@ class UnixConfig(ProductionConfig):
         rotatingFilelog_handler = RotatingFileHandler(filename=os.path.join(
             './logs/', 'blog.log'))
         rotatingFilelog_handler.setLevel(logging.WARNING)
+        rotatingFilelog_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s '
+            '[in %(pathname)s:%(lineno)d]'
+        ))
         app.logger.addHandler(rotatingFilelog_handler)
 
 

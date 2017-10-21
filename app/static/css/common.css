@@ -136,3 +136,7 @@ img {
     text-align: center;
     width: 100%;
 }
+
+.review p {
+    text-indent: 2em;
+}
