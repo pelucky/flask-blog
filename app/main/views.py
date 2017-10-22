@@ -5,7 +5,7 @@ from flask import (render_template, request,
                    current_app, flash, redirect, url_for)
 from ..models import User
 from . import main
-from ..models import Article, Category
+from ..models import Article, Category, Tag
 from urlparse import urljoin
 from werkzeug.contrib.atom import AtomFeed
 
@@ -21,8 +21,10 @@ def index():
     one_page_articles = pagination.items
     articles = Article.query.order_by(Article.create_timestramp.desc())
     categories = Category.query
+    tags = Tag.query
     return render_template('index.html', articles=articles,
                            categories=categories,
+                           tags=tags,
                            one_page_articles=one_page_articles,
                            pagination=pagination)
 
@@ -44,17 +46,30 @@ def article(id):
 def archive():
     articles = Article.query.order_by(Article.create_timestramp.desc())
     categories = Category.query
+    tags = Tag.query
     return render_template('archive.html', articles=articles,
-                           categories=categories)
+                           categories=categories, tags=tags)
 
 
 @main.route('/category/<string:name>')
 def category(name):
     articles = Article.query.order_by(Article.create_timestramp.desc())
     categories = Category.query
+    tags = Tag.query
     category = Category.query.filter_by(name=name).first_or_404()
     return render_template('category.html', category=category,
-                           articles=articles, categories=categories)
+                           articles=articles, categories=categories,
+                           tags=tags)
+
+
+@main.route('/tag/<string:name>')
+def tag(name):
+    articles = Article.query.order_by(Article.create_timestramp.desc())
+    tags = Tag.query
+    categories = Category.query
+    tag = Tag.query.filter_by(name=name).first_or_404()
+    return render_template('tag.html', tag=tag, categories=categories,
+                           articles=articles, tags=tags)
 
 
 @main.route('/search')

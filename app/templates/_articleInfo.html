@@ -9,9 +9,14 @@
     <span class="post-category"><span class="glyphicon glyphicon-flag"></span>
             <a href="{{ url_for('main.category', name=article.category.name) }}">{{ article.category.name }}</a>
     </span>
-    <span class="post-tags"><span class="glyphicon glyphicon-tags"></span>
-            {{ article.tags }}
-    </span>
+    {% if article.tags.all() %}
+        <span class="post-tags"><span class="glyphicon glyphicon-tags"></span>
+                {% for tag in article.tags.all() %}
+                    <a href="{{ url_for('main.tag', name=tag.name) }}">{{ tag.name }}</a>
+                    {{ "," if not loop.last}}
+                {% endfor %}
+        </span>
+    {% endif %}
     <span class="post-tags"><span class="glyphicon glyphicon-eye-open"></span>
             {{ article.number_of_views }}
     </span>

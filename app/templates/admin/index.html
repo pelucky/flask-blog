@@ -38,7 +38,12 @@
                                     {{ article.category.name }}
                                 </a>
                             </td>
-                            <td>{{ article.tags }}</td>
+                            <td>
+                                {% for tag in article.tags.all() %}
+                                    <a href="{{ url_for('main.tag', name=tag.name) }}">{{ tag.name }}</a>
+                                    {{ "," if not loop.last}}
+                                {% endfor %}
+                            </td>
                             <td>{{ article.create_timestramp|string|truncate(10, killwords=True, end='') }}</td>
                             <td>{{ article.last_edit_timestramp|string|truncate(10, killwords=True, end='') }}</td>
                             <td><a href="{{ url_for('admin.edit_article', id=article.id) }}"> 

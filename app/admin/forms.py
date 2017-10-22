@@ -73,3 +73,14 @@ class DeleteCategoryForm(FlaskForm):
         super(DeleteCategoryForm, self).__init__()
         self.category_id.choices = [(c.id, c.name)
                                     for c in Category.query.order_by('id')]
+
+
+class EditTagForm(FlaskForm):
+    old_name = StringField('Tag old name', validators=[DataRequired()])
+    new_name = StringField('Tag new name', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class DeleteTagForm(FlaskForm):
+    tag_name = StringField('Tag name', validators=[DataRequired()])
+    submit = SubmitField('Submit')

@@ -7,10 +7,11 @@ from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
                    WriteArticleForm, AddCategoryForm, EditCategoryForm,
-                   DeleteCategoryForm)
-from ..models import User, Article, Category
+                   DeleteCategoryForm, EditTagForm, DeleteTagForm)
+from ..models import User, Article, Category, Tag
 from app import db
 from datetime import datetime
+import re
 
 
 @admin.route('/', methods=['GET', 'POST'])
@@ -92,11 +93,16 @@ def change_user_info():
 def write_article():
     form = WriteArticleForm()
     if form.validate_on_submit():
+        tag_names = re.split(u"[,，]", form.tags.data)
+        tag_list = []
+        for tag_name in tag_names:
+            tag = Tag.query.filter_by(name=tag_name.strip()).first()
+            tag_list.append(tag if tag else Tag(name=tag_name.strip()))
         article = Article(title=form.title.data,
                           content=form.content.data,
                           author_id=current_user.id,
                           category_id=form.category_id.data,
-                          tags=form.tags.data)
+                          tags=tag_list)
         db.session.add(article)
         db.session.commit()
         flash(u"Save Articles successfully!", 'success')
@@ -126,7 +132,12 @@ def edit_article(id):
         article.title = form.title.data
         article.content = form.content.data
         article.category_id = form.category_id.data
-        article.tags = form.tags.data
+        tag_names = re.split(u"[,，]", form.tags.data)
+        tag_list = []
+        for tag_name in tag_names:
+            q_tag = Tag.query.filter_by(name=tag_name.strip()).first()
+            tag_list.append(q_tag if q_tag else Tag(name=tag_name.strip()))
+        article.tags = tag_list
         article.last_edit_timestramp = datetime.now()
         db.session.add(article)
         db.session.commit()
@@ -135,7 +146,7 @@ def edit_article(id):
     form.title.data = article.title
     form.content.data = article.content
     form.category_id.data = article.category_id
-    form.tags.data = article.tags
+    form.tags.data = ','.join([tag.name for tag in article.tags.all()])
     return render_template('admin/write_article.html', form=form)
 
 
@@ -160,12 +171,17 @@ def add_category():
 def edit_category():
     form = EditCategoryForm()
     if form.validate_on_submit():
-        category = Category.query.get_or_404(form.category_id.data)
-        category.name = form.new_name.data
-        db.session.add(category)
-        db.session.commit()
-        flash(u'Edit category successfully!', 'success')
-        return redirect(url_for('admin.index'))
+        category = Category.query.get(form.category_id.data)
+        if category:
+            category.name = form.new_name.data
+            db.session.add(category)
+            db.session.commit()
+            flash(u"Edit category %s successfull!"
+                  % category.name, 'success')
+            return redirect(url_for('admin.index'))
+        else:
+            flash(u"Can't find category with id %s"
+                  % str(form.category_id.data), 'error')
     return render_template('admin/edit_category.html', form=form)
 
 
@@ -174,7 +190,7 @@ def edit_category():
 def delete_category():
     form = DeleteCategoryForm()
     if form.validate_on_submit():
-        category = Category.query.get_or_404(form.category_id.data)
+        category = Category.query.get(form.category_id.data)
         if category:
             articles = Article.query.filter_by(category_id=category.id)
             for article in articles:
@@ -183,8 +199,53 @@ def delete_category():
             db.session.commit()
             flash(u"Delete category %s successfull!"
                   % category.name, 'success')
+            return redirect(url_for('admin.index'))
         else:
-            flash(u"Can't find acategoryrticle with id %s"
-                  % str(category.id), 'error')
-        return redirect(url_for('admin.index'))
+            flash(u"Can't find category with id %s"
+                  % str(form.category_id.data), 'error')
     return render_template('admin/delete_category.html', form=form)
+
+
+@admin.route('/edit_tag', methods=['GET', 'POST'])
+@login_required
+def edit_tag():
+    form = EditTagForm()
+    if form.validate_on_submit():
+        old_tag = Tag.query.filter_by(name=form.old_name.data).first()
+        if old_tag:
+            new_tag = Tag.query.filter_by(name=form.new_name.data).first()
+            if new_tag:
+                for article in old_tag.articles.all():
+                    article.tags = [tag if tag.name != old_tag.name
+                                    else new_tag
+                                    for tag in article.tags.all()]
+                    db.session.add(article)
+                    db.session.commit()
+            else:
+                old_tag.name = form.new_name.data
+                db.session.add(old_tag)
+                db.session.commit()
+            flash(u'Edit tag successfully!', 'success')
+            return redirect(url_for('admin.index'))
+        else:
+            flash(u"Can't find tag with name %s"
+                  % str(form.old_tag.data), 'error')
+    return render_template('admin/edit_tag.html', form=form)
+
+
+@admin.route('/delete_tag/', methods=["GET", "POST"])
+@login_required
+def delete_tag():
+    form = DeleteTagForm()
+    if form.validate_on_submit():
+        tag = Tag.query.filter_by(name=form.tag_name.data).first()
+        if tag:
+            db.session.delete(tag)
+            db.session.commit()
+            flash(u"Delete tag %s successfull!"
+                  % form.tag_name.name, 'success')
+            return redirect(url_for('admin.index'))
+        else:
+            flash(u"Can't find tag with name %s" % str(form.tag_name.name),
+                  'error')
+    return render_template('admin/delete_tag.html', form=form)

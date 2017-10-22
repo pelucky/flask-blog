@@ -1,16 +1,38 @@
 <div class="row">
     <h5>Recent Posts</h5>
     <ul>
-        {% for article in articles[0:config.get('RECENT_POST')] %}       
-                <li><a href="{{ url_for('main.article', id=article.id) }}">{{ article.title }}</a></li>
-        {% endfor %}
+        {% if articles %}
+            {% for article in articles[0:config.get('RECENT_POST')] %}       
+                    <li><a href="{{ url_for('main.article', id=article.id) }}">{{ article.title }}</a></li>
+            {% endfor %}
+        {% else %}
+            No Post yet
+        {% endif %}
     </ul>
 </div>
 <div class="row">
     <h5>Categories</h5>
     <ul>
-        {% for category in categories %}
-            <li><a href="{{ url_for('main.category', name=category.name) }}">{{ category.name }}</a>({{ category.articles.count() }})</li>
-        {% endfor %}
+        {% if categories %}
+            {% for category in categories %}
+                <li><a href="{{ url_for('main.category', name=category.name) }}">{{ category.name }}</a>({{ category.articles.count() }})</li>
+            {% endfor %}
+        {% else %}
+            No category yet
+        {% endif %}
+    </ul>
+</div>
+<div class="row">
+    <h5>Tags</h5>
+    <ul>
+        {% if tags %}
+            {% for tag in tags %}
+                {% if tag.articles.count() %}
+                    <li><a href="{{ url_for('main.tag', name=tag.name) }}">{{ tag.name }}</a>({{ tag.articles.count() }})</li>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            No tag yet
+        {% endif %}
     </ul>
 </div>

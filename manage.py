@@ -7,7 +7,6 @@ from flaskext.markdown import Markdown
 import os
 
 
-print "Run in manage"
 application = create_app(os.getenv('FLASK_CONFIG') or 'DEFAULT')
 migrate = Migrate(application, db)
 Markdown(application)

@@ -76,10 +76,18 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+articles_tags = db.Table(
+    'articles_tags',
+    db.Column('tag_id', db.Integer,
+              db.ForeignKey('tags.id'), primary_key=True),
+    db.Column('article_id', db.Integer,
+              db.ForeignKey('articles.id'), primary_key=True))
+
+
 class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(64), unique=True, nullable=False)
+    title = db.Column(db.String(64), nullable=False)
     content = db.Column(db.Text())
     markdown_html = db.Column(db.Text())
     create_timestramp = db.Column(db.DateTime, index=True,
@@ -89,7 +97,8 @@ class Article(db.Model):
                           nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'),
                             nullable=False)
-    tags = db.Column(db.String(64))
+    tags = db.relationship('Tag', secondary=articles_tags, lazy='dynamic',
+                           backref=db.backref('articles', lazy='dynamic'))
     number_of_views = db.Column(db.Integer, default=0)
 
     @staticmethod
@@ -124,8 +133,17 @@ db.event.listen(Article.content, 'set', Article.on_changed_content)
 class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
+    name = db.Column(db.String(50), unique=True, nullable=False)
     articles = db.relationship('Article', backref='category', lazy='dynamic')
 
     def __repr__(self):
         return '<Category %r>' % self.name
+
+
+class Tag(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return '<Tag %r>' % self.name
