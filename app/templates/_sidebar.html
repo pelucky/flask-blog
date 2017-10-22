@@ -15,7 +15,9 @@
     <ul>
         {% if categories %}
             {% for category in categories %}
-                <li><a href="{{ url_for('main.category', name=category.name) }}">{{ category.name }}</a>({{ category.articles.count() }})</li>
+                {% if category.articles.count() %}
+                    <li><a href="{{ url_for('main.category', name=category.name) }}">{{ category.name }}</a>({{ category.articles.count() }})</li>
+                {% endif %}
             {% endfor %}
         {% else %}
             No category yet
