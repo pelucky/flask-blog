@@ -23,10 +23,10 @@ def login():
             if user and user.verify_password(user.password_hash,
                                              form.password.data):
                 login_user(user, remember=form.remember_me.data)
-                user.last_login_date = datetime.now()
                 flash(u"Log in successfully! Your last login date is: %s"
                       % str(current_user.last_login_date).split('.')[0],
                       'success')
+                user.last_login_date = datetime.now()
                 return redirect(url_for('admin.index'))
             flash(u"Username or Password error!", 'error')
             current_app.logger.warning(u'Invalid Login: %s, %s'
