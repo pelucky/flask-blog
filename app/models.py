@@ -115,7 +115,8 @@ class Article(db.Model):
                         'markdown.extensions.sane_lists',
                         'markdown.extensions.smarty',
                         'markdown.extensions.toc',
-                        'markdown.extensions.wikilinks'])
+                        'markdown.extensions.wikilinks',
+                        'markdown.extensions.mathjax'])
 
     @staticmethod
     def add_one_view(article):
