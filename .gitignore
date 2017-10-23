@@ -56,3 +56,12 @@ target/
 
 # Database
 *.sqlite
+
+# Database migrations
+migrations/
+
+# virtualenv
+venv/
+
+# enviroment file
+.env
