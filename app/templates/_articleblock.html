@@ -13,9 +13,9 @@
         <div class="col-lg-12 review">
             <p>
                 {% if article.markdown_html %}
-                    {{ article.markdown_html|safe|striptags|truncate(200) }}
+                    {{ article.markdown_html|safe|striptags|truncate(300, True) }}
                 {% else %}
-                    {{ article.content|markdown|safe|striptags|truncate(200) }}
+                    {{ article.content|markdown|safe|striptags|truncate(300, True) }}
                 {% endif %}
                 <!-- <a href="{{ url_for('main.article', id=article.id) }}"> Read More</a> -->
             </p>
