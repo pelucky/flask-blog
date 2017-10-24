@@ -87,7 +87,7 @@ articles_tags = db.Table(
 class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text())
     markdown_html = db.Column(db.Text())
     create_timestramp = db.Column(db.DateTime, index=True,

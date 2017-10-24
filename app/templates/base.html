@@ -44,6 +44,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
           <ul class="dropdown-menu">
              <li><a href="{{ url_for('admin.index') }}"><span class="glyphicon glyphicon-dashboard"> Dashboard</a></li>
+              <li><a href="{{ url_for('admin.write_article') }}"><span class="glyphicon glyphicon-plus"> Add Articles</a></li>
             <li><a href="{{ url_for('admin.change_user_info') }}"><span class="glyphicon glyphicon-user"> Change UserInfo</a></li>
             <li><a href="{{ url_for('admin.change_password') }}"><span class="glyphicon glyphicon-cog"> Change Password</a></li>
             <li role="separator" class="divider"></li>

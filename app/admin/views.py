@@ -102,7 +102,9 @@ def write_article():
                           content=form.content.data,
                           author_id=current_user.id,
                           category_id=form.category_id.data,
-                          tags=tag_list)
+                          tags=tag_list,
+                          create_timestramp=datetime.now(),
+                          last_edit_timestramp=datetime.now())
         db.session.add(article)
         db.session.commit()
         flash(u"Save Articles successfully!", 'success')
