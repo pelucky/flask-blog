@@ -4,7 +4,7 @@
         <span class="label label-primary">Edit</span>
     </a>
     {% endif %}
-    <span class="post-datetime"><span class="glyphicon glyphicon-calendar"></span>{{ article.create_timestramp|string|truncate(19, killwords=True, end='')}}</span>
+    <span class="post-datetime"><span class="glyphicon glyphicon-calendar"></span>{{ article.create_timestramp|string|truncate(10, killwords=True, end='')}}</span>
     <span class="post-user"><span class="glyphicon glyphicon-user"></span>{{ article.author.nickname}}</span>
     <span class="post-category"><span class="glyphicon glyphicon-flag"></span>
             <a href="{{ url_for('main.category', name=article.category.name) }}">{{ article.category.name }}</a>
@@ -19,5 +19,10 @@
     {% endif %}
     <span class="post-tags"><span class="glyphicon glyphicon-eye-open"></span>
             {{ article.number_of_views }}
+    </span>
+    <span class="post-tags"><span class="glyphicon glyphicon-comment"></span>
+            <span id = "sourceId::{{ article.id }}" class = "cy_cmt_count" ></span>
+            <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cytkj1ELV">
+            </script>
     </span>
 </div>
