@@ -23,6 +23,9 @@ class Config(object):
     SQLALCHEMY_RECORD_QUERIES = True
     FLASK_POST_PER_PAGE = 6
     RECENT_POST = 10
+    # Used for Geetset
+    GEETEST_ID = os.environ.get('GEETEST_ID')
+    GEETEST_KEY = os.environ.get('GEETEST_KEY')
 
     @staticmethod
     def init_app(app):

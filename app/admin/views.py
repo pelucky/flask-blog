@@ -2,7 +2,7 @@
 # -*- coding=utf-8 -*-
 
 from flask import (render_template, url_for,
-                   redirect, flash, current_app)
+                   redirect, flash, current_app, session, request)
 from flask_login import login_user, login_required, logout_user, current_user
 from . import admin
 from forms import (LoginForm, ChangePasswordForm, ChangeUserInformationForm,
@@ -12,28 +12,60 @@ from ..models import User, Article, Category, Tag
 from app import db
 from datetime import datetime
 import re
+import random
+from geetest import GeetestLib
 
 
-@admin.route('/', methods=['GET', 'POST'])
+@admin.route('/', methods=['GET'])
 def login():
     if not current_user.is_authenticated:
         form = LoginForm()
-        if form.validate_on_submit():
-            user = User.query.filter_by(username=form.username.data).first()
-            if user and user.verify_password(user.password_hash,
-                                             form.password.data):
-                login_user(user, remember=form.remember_me.data)
-                flash(u"Log in successfully! Your last login date is: %s"
-                      % str(current_user.last_login_date).split('.')[0],
-                      'success')
-                user.last_login_date = datetime.now()
-                return redirect(url_for('admin.index'))
-            flash(u"Username or Password error!", 'error')
-            current_app.logger.warning(u'Invalid Login: %s, %s'
-                                       % (form.username.data,
-                                          form.password.data))
         return render_template('admin/login.html', form=form)
     return redirect(url_for('admin.index'))
+
+
+@admin.route('/geetest/register', methods=["GET"])
+def get_captcha():
+    geetest_user_id = random.randint(1, 100)
+    gt = GeetestLib(current_app.config['GEETEST_ID'],
+                    current_app.config['GEETEST_KEY'])
+    status = gt.pre_process(geetest_user_id)
+    session[gt.GT_STATUS_SESSION_KEY] = status
+    session["geetest_user_id"] = geetest_user_id
+    response_str = gt.get_response_str()
+    return response_str
+
+
+@admin.route('/geetest/validate', methods=["POST"])
+def validate_captcha():
+    gt = GeetestLib(current_app.config['GEETEST_ID'],
+                    current_app.config['GEETEST_KEY'])
+    challenge = request.form[gt.FN_CHALLENGE]
+    validate = request.form[gt.FN_VALIDATE]
+    seccode = request.form[gt.FN_SECCODE]
+    status = session[gt.GT_STATUS_SESSION_KEY]
+    geetest_user_id = session["geetest_user_id"]
+    if status:
+        result = gt.success_validate(challenge, validate,
+                                     seccode, geetest_user_id)
+    else:
+        result = gt.failback_validate(challenge, validate, seccode)
+    form = LoginForm()
+    if result & form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.verify_password(user.password_hash,
+                                         form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            flash(u"Log in successfully! Your last login date is: %s"
+                  % str(current_user.last_login_date).split('.')[0],
+                  'success')
+            user.last_login_date = datetime.now()
+            return redirect(url_for('admin.index'))
+        flash(u"Username or Password error!", 'error')
+        current_app.logger.warning(u'Invalid Login: %s, %s'
+                                   % (form.username.data,
+                                      form.password.data))
+    return render_template('admin/login.html', form=form)
 
 
 @admin.route('/index')
