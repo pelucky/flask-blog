@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
 
     def gravatar(self, size=100, default='identicon', rating='g'):
         if request.is_secure:
-            url = 'https://https://s.gravatar.com/avatar'
+            url = 'https://s.gravatar.com/avatar'
         else:
             url = 'http://www.gravatar.com/avatar'
         hash = self.gravatar_url or \
