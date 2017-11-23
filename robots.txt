@@ -1,0 +1,2 @@
+User-agent: *
+Disallow: /want_login/ 

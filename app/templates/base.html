@@ -4,11 +4,37 @@
 
 {% block head %}
 {{ super() }}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}" 
     type="image/x-icon"> 
 <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}" 
     type="image/x-icon">
 <link rel="stylesheet" href="{{ url_for('static',filename='css/common.css') }}"/>
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?ac11a6f76a210ffe6692f475231e105f";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
 {% endblock %}
 
 {% block navbar %}
